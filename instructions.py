@@ -14,7 +14,7 @@ class Instructions(object):
 
     self.id = 'At the top of every hour, click the Log ID button. Make '
     self.id = self.id + 'sure you also state our station tag on air! '
-    self.id = self.id + '(KTEQ FM 91.3 Rapid City)' 
+    self.id = self.id + '(KTEQ FM Rapid City)' 
 
     self.song = 'Enter Song Name, Artist, and Composer (if applicable) '
     self.song = self.song + 'for EVERY song you play. Try to update this '
@@ -24,6 +24,14 @@ class Instructions(object):
     self.psa = 'Twice per hour, either read or play one of the following '
     self.psa = self.psa + 'Public Service Announcements. Log the PSA '
     self.psa = self.psa + 'by selecting the correct one from the menu.'
+
+    self.help = 'click the HELP button below to submit a request to KTEQ '
+    self.help = self.help + 'management (equipment isn\'t working, software '
+    self.help = self.help + 'is acting strange, etc.'
+
+    self.swear = 'click the LOG SWEAR button below to report any swears '
+    self.swear = self.swear + 'occuring on air. Failure to do so can result '
+    self.swear = self.swear + 'in a writeup!'
 
 if __name__ == '__main__':
   i = Instructions()

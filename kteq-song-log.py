@@ -2,6 +2,7 @@
 
 from tkinter import *
 from tkinter import ttk
+from tkinter import messagebox 
 import csv
 import datetime
 from PIL import ImageTk, Image
@@ -10,6 +11,7 @@ from PIL import ImageTk, Image
 import shows
 import psa
 import instructions
+import swear
 
 LOG_ID   = 0
 LOG_SONG = 1
@@ -155,7 +157,7 @@ def nowPlaying( source=LOG_ID ):
 	artist   = songArtist.get()
 	psa      = psaName.get()
 	nowPlay  = open(filename, 'w')
-	default = "KTEQ FM 91.3 Rapid City, South Dakota"
+	default = "KTEQ FM Rapid City, South Dakota - 91.3 FM"
 	if(source==LOG_ID):
 		#Station ID
 		line = default
@@ -172,6 +174,14 @@ def nowPlaying( source=LOG_ID ):
 		else:
 			line = default
 	nowPlay.write(line)
+
+def notImplemented():
+	messagebox.showinfo("Nothing!", "This button doesn't do anything right now!")
+
+def logSwearDialog():
+	show = showName.get()
+	s = swear.swearLog()
+	#s.openSwearLog(show)
 
 def refreshShowList():
 	showName.set('')
@@ -195,14 +205,16 @@ psaFrame  = ttk.Frame(root, borderwidth=5, relief="sunken")
 idFrame   = ttk.Frame(root, borderwidth=5, relief="sunken")
 tickFrame = ttk.Frame(root, borderwidth=5, relief="sunken")
 logoFrame = ttk.Frame(root, borderwidth=5, relief="sunken")
+reportFrame = ttk.Frame(root, borderwidth=5, relief="sunken")
 
 #place frames
-infoFrame.grid(column=0,  row=0,  columnspan=6,  rowspan=5,  sticky=(N, W, E, S))
-songFrame.grid(column=0,  row=5,  columnspan=6,  rowspan=5,  sticky=(N, W, E, S))
-psaFrame.grid( column=6,  row=5,  columnspan=6,  rowspan=5,  sticky=(N, W, E, S))
-idFrame.grid(  column=6,  row=0,  columnspan=6,  rowspan=5,  sticky=(N, W, E, S))
-tickFrame.grid(column=0,  row=10, columnspan=18, rowspan=5,  sticky=(N, W, E, S))
-logoFrame.grid(column=12, row=0,  columnspan=6,  rowspan=10, sticky=(N, W, E, S))
+infoFrame.grid(  column=0,  row=0,  columnspan=6,  rowspan=5,  sticky=(N, W, E, S))
+songFrame.grid(  column=0,  row=5,  columnspan=6,  rowspan=5,  sticky=(N, W, E, S))
+psaFrame.grid(   column=6,  row=5,  columnspan=6,  rowspan=5,  sticky=(N, W, E, S))
+idFrame.grid(    column=6,  row=0,  columnspan=6,  rowspan=5,  sticky=(N, W, E, S))
+logoFrame.grid(  column=12, row=0,  columnspan=6,  rowspan=5, sticky=(N, W, E, S))
+reportFrame.grid(  column=12,  row=5,  columnspan=6,  rowspan=5,  sticky=(N, W, E, S))
+tickFrame.grid(  column=0,  row=15, columnspan=18, rowspan=5,  sticky=(N, W, E, S))
 
 #CREATE NEW INSTANCE OF SHOWS AND PSAS
 showList = shows.Shows()
@@ -248,16 +260,26 @@ logSong      = ttk.Button(songFrame, text="Log Song",     command=logSong)
 logPSA       = ttk.Button(psaFrame,  text="Log PSA",      command=logPSA)
 logID        = ttk.Button(idFrame,   text="Log ID",       command=logID)
 refreshShows = ttk.Button(infoFrame, text="Refresh List", command=refreshShowList)
+logIn 		 = ttk.Button(infoFrame, text="Log In", command=notImplemented)
+logOut       = ttk.Button(infoFrame, text="Log Out", command=notImplemented)
+logOut       = ttk.Button(infoFrame, text="Log Out", command=notImplemented)
+getHelp      = ttk.Button(reportFrame, text="Get Help", command=notImplemented)
+logSwear     = ttk.Button(reportFrame, text="Log Swear", command=logSwearDialog)
+
 
 #Create Image
 imgLogo = ttk.Label(logoFrame, image=img_logo)
 
 #place buttons
 logSong.grid(     column=2, row=4, sticky=(W, E))
-logPSA.grid(      column=2, row=3, sticky=(W, E))
+logPSA.grid(      column=3, row=3, sticky=(W, E))
 logID.grid(       column=2, row=3, sticky=(N, W, E, S))
 refreshShows.grid(column=2, row=1, sticky=(N, W, E, S))
+logIn.grid(column=2, row=2, sticky=(N, W, E, S))
+logOut.grid(column=3, row=2, sticky=(N, W, E, S))
 
+getHelp.grid(column=2, row=2, sticky=(N, W, E, S))
+logSwear.grid(column=2, row=5, sticky=(N, W, E, S))
 #Place Image
 imgLogo.grid(column=2, row=3, sticky=(N, W, E, S))
 
@@ -273,7 +295,8 @@ howTo_Show_lbl = ttk.Label(infoFrame, text=instructions.show, wraplength=400)
 howTo_Song_lbl = ttk.Label(songFrame, text=instructions.song, wraplength=400)
 howTo_ID_lbl   = ttk.Label(idFrame,   text=instructions.id  , wraplength=400)
 howTo_PSA_lbl  = ttk.Label(psaFrame,  text=instructions.psa , wraplength=400)
-
+howTo_Help_lbl   = ttk.Label(reportFrame,   text=instructions.help  , wraplength=400)
+howTo_Swear_lbl  = ttk.Label(reportFrame,  text=instructions.swear , wraplength=400)
 
 #Labels for ticker
 prevSong1date_lbl     = ttk.Label(tickFrame, padding=6, text="")
@@ -318,6 +341,9 @@ howTo_Show_lbl.grid(column=0, row=0, columnspan=5, sticky=W)
 howTo_Song_lbl.grid(column=0, row=0, columnspan=5, sticky=W)
 howTo_ID_lbl.grid(  column=0, row=0, columnspan=5, sticky=W)
 howTo_PSA_lbl.grid( column=0, row=0, columnspan=5, sticky=W)
+
+howTo_Help_lbl.grid(  column=0, row=0, columnspan=5, sticky=W)
+howTo_Swear_lbl.grid( column=0, row=4, columnspan=5, sticky=W)
 
 #Place ticker Labels
 prevSong1date_lbl.grid(    column=0,  row=0, columnspan=2, sticky=(W, E))
