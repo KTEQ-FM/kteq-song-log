@@ -15,6 +15,7 @@ LOG_ID   = 0
 LOG_SONG = 1
 LOG_PSA  = 2
 
+
 def logSong(*args):
 	song     = songName.get()
 	artist   = songArtist.get()
@@ -44,7 +45,7 @@ def logSong(*args):
 def logID():
 	show = showName.get()
 	now = datetime.datetime.now()
-	
+
 	filename = 'bmi_' + str(now.month).zfill(2) + '_' + str(now.year) + '.csv'
 	date = str(now.month).zfill(2) + '/' + str(now.day).zfill(2) + '/' + str(now.year)
 	time = str(now.hour).zfill(2) + ':' + str(now.minute).zfill(2)
@@ -52,7 +53,7 @@ def logID():
 	with open(filename, 'a', newline='') as idlog:
 		idwriter = csv.writer(idlog, delimiter=',')
 		idwriter.writerow([date, time, 'STATION TAG', 'KTEQ', '', show])
-	
+
 	#log to nowPlaying.txt
 	nowPlaying(source=LOG_ID)
 
@@ -64,7 +65,7 @@ def logPSA(*args):
 	show = showName.get()
 	psa  = psaName.get()
 	now = datetime.datetime.now()
-	
+
 	filename  = 'bmi_' + str(now.month).zfill(2) + '_' + str(now.year) + '.csv'
 	filename2 = 'psa_' + str(now.month).zfill(2) + '_' + str(now.year) + '.csv'
 	date = str(now.month).zfill(2) + '/' + str(now.day).zfill(2) + '/' + str(now.year)
@@ -77,7 +78,7 @@ def logPSA(*args):
 	with open(filename2, 'a', newline='') as psalog:
 		psawriter = csv.writer(psalog, delimiter=',')
 		psawriter.writerow([date, time, psa])
-	
+
 	#log to nowPlaying.txt
 	nowPlaying(source=LOG_PSA)
 
@@ -85,7 +86,7 @@ def logPSA(*args):
 	updateTicker(source=LOG_PSA)
 
 def updateTicker(source=LOG_ID):
-	
+
 	song     = songName.get()
 	artist   = songArtist.get()
 	composer = songComposer.get()
@@ -148,7 +149,7 @@ def updateTicker(source=LOG_ID):
 
 
 def nowPlaying( source=LOG_ID ):
-	
+
 	#Write to a file what song is currently playing (or what have you)
 	filename = 'nowPlaying.txt'
 	song     = songName.get()
@@ -177,32 +178,54 @@ def refreshShowList():
 	showName.set('')
 	showList = None
 	showList = shows.Shows()
-	
+
 	showName.set(showList.list[0])
 	showNameList['menu'].delete(0, 'end')
 	for show in showList.list:
 		showNameList['menu'].add_command(label=show, command=lambda s=show: showName.set(s))
-	
+
+def generateLyrics():
+    with open("lyrics.txt") as f:
+            lyrics = f.readlines()
+    lyrics = "".join(lyrics)
+    lyricsText.delete("1.0",END)
+    lyricsText.insert(END, lyrics)
+
+def showLyrics():
+    lyricFrame.grid(column=18, row=0,  columnspan=15, rowspan=15, sticky=(N, W, E, S))
+
+    # Switch to displaying "Hide" Button
+    toggleLyricsShow.grid_remove()
+    toggleLyricsHide.grid(column=0, row=1,rowspan=2,columnspan=2,sticky=(N, W, E, S))
+
+def hideLyrics():
+    lyricFrame.grid_remove()
+    # Switch to displaying "Show" Button
+    toggleLyricsHide.grid_remove()
+    toggleLyricsShow.grid(column=0, row=1,rowspan=2,columnspan=2,sticky=(N, W, E, S))
 
 #create the window and title it
 root = Tk()
 root.title("KTEQ 91.3FM SONG AND PSA LOG")
 root.resizable(FALSE,FALSE)
+
 #create the frames
-infoFrame = ttk.Frame(root, borderwidth=5, relief="sunken")
-songFrame = ttk.Frame(root, borderwidth=5, relief="sunken")
-psaFrame  = ttk.Frame(root, borderwidth=5, relief="sunken")
-idFrame   = ttk.Frame(root, borderwidth=5, relief="sunken")
-tickFrame = ttk.Frame(root, borderwidth=5, relief="sunken")
-logoFrame = ttk.Frame(root, borderwidth=5, relief="sunken")
+infoFrame  = ttk.Frame(root, borderwidth=5, relief="sunken")
+songFrame  = ttk.Frame(root, borderwidth=5, relief="sunken")
+psaFrame   = ttk.Frame(root, borderwidth=5, relief="sunken")
+idFrame    = ttk.Frame(root, borderwidth=5, relief="sunken")
+tickFrame  = ttk.Frame(root, borderwidth=5, relief="sunken")
+logoFrame  = ttk.Frame(root, borderwidth=5, relief="sunken")
+lyricFrame = ttk.Frame(root, borderwidth=5, relief="sunken")
 
 #place frames
-infoFrame.grid(column=0,  row=0,  columnspan=6,  rowspan=5,  sticky=(N, W, E, S))
-songFrame.grid(column=0,  row=5,  columnspan=6,  rowspan=5,  sticky=(N, W, E, S))
-psaFrame.grid( column=6,  row=5,  columnspan=6,  rowspan=5,  sticky=(N, W, E, S))
-idFrame.grid(  column=6,  row=0,  columnspan=6,  rowspan=5,  sticky=(N, W, E, S))
-tickFrame.grid(column=0,  row=10, columnspan=18, rowspan=5,  sticky=(N, W, E, S))
-logoFrame.grid(column=12, row=0,  columnspan=6,  rowspan=10, sticky=(N, W, E, S))
+infoFrame.grid( column=0,  row=0,  columnspan=6,  rowspan=5,  sticky=(N, W, E, S))
+songFrame.grid( column=0,  row=5,  columnspan=6,  rowspan=5,  sticky=(N, W, E, S))
+psaFrame.grid(  column=6,  row=5,  columnspan=6,  rowspan=5,  sticky=(N, W, E, S))
+idFrame.grid(   column=6,  row=0,  columnspan=6,  rowspan=5,  sticky=(N, W, E, S))
+tickFrame.grid( column=0,  row=10, columnspan=18, rowspan=5,  sticky=(N, W, E, S))
+logoFrame.grid( column=12, row=0,  columnspan=6,  rowspan=10, sticky=(N, W, E, S))
+lyricFrame.grid(column=18, row=0,  columnspan=15, rowspan=15, sticky=(N, W, E, S))
 
 #CREATE NEW INSTANCE OF SHOWS AND PSAS
 showList = shows.Shows()
@@ -226,14 +249,17 @@ songName_entry     = ttk.Entry(songFrame, width=7, textvariable=songName)
 songArtist_entry   = ttk.Entry(songFrame, width=7, textvariable=songArtist)
 songComposer_entry = ttk.Entry(songFrame, width=7, textvariable=songComposer)
 
-#Create image
-img_logo = ImageTk.PhotoImage(file="img/kteq-logo.jpg")
-
 #Place Text Boxes
 songComposer_entry.grid(column=3, row=3, columnspan=6, sticky=(W, E))
 songArtist_entry.grid(  column=3, row=2, columnspan=6, sticky=(W, E))
 songName_entry.grid(    column=3, row=1, columnspan=6, sticky=(W, E))
 
+#Create image
+img_logo = ImageTk.PhotoImage(file="img/kteq-logo.jpg")
+imgLogo = ttk.Label(logoFrame, image=img_logo)
+
+#Place Image
+imgLogo.grid(column=0, row=0, sticky=(N, W, E, S))
 
 #Create drop downs
 showNameList = OptionMenu(infoFrame, showName, *showList.list)
@@ -244,22 +270,24 @@ showNameList.grid(column=3, row=1, sticky=(W, E))
 psaNameList.grid(column=3, row=1, columnspan=3, sticky=(W, E))
 
 #Create buttons
-logSong      = ttk.Button(songFrame, text="Log Song",     command=logSong)
-logPSA       = ttk.Button(psaFrame,  text="Log PSA",      command=logPSA)
-logID        = ttk.Button(idFrame,   text="Log ID",       command=logID)
-refreshShows = ttk.Button(infoFrame, text="Refresh List", command=refreshShowList)
+logSong       = ttk.Button(songFrame, text="Log Song",     command=logSong)
+logPSA        = ttk.Button(psaFrame,  text="Log PSA",      command=logPSA)
+logID         = ttk.Button(idFrame,   text="Log ID",       command=logID)
+refreshShows  = ttk.Button(infoFrame, text="Refresh List", command=refreshShowList)
+toggleLyricsHide      = ttk.Button(logoFrame, text="Hide Lyrics", command=hideLyrics)
+toggleLyricsShow      = ttk.Button(logoFrame, text="Show Lyrics", command=showLyrics)
+refreshLyrics = ttk.Button(lyricFrame, text="Generate Lyrics", command=generateLyrics)
 
-#Create Image
-imgLogo = ttk.Label(logoFrame, image=img_logo)
+
 
 #place buttons
 logSong.grid(     column=2, row=4, sticky=(W, E))
 logPSA.grid(      column=2, row=3, sticky=(W, E))
 logID.grid(       column=2, row=3, sticky=(N, W, E, S))
 refreshShows.grid(column=2, row=1, sticky=(N, W, E, S))
+toggleLyricsHide.grid(column=0, row=1,rowspan=2,columnspan=2,sticky=(N, W, E, S))
+refreshLyrics.grid(column=0, row=1,rowspan=2,columnspan=2,sticky=(N, W, E, S))
 
-#Place Image
-imgLogo.grid(column=2, row=3, sticky=(N, W, E, S))
 
 
 #Create labels
@@ -268,12 +296,22 @@ songArtist_lbl   = ttk.Label(songFrame, text="Song Artist:")
 songComposer_lbl = ttk.Label(songFrame, text="Song Composer:")
 psa_lbl          = ttk.Label(psaFrame,  text="PSA Title:")
 
+
 #Create instructions labels
 howTo_Show_lbl = ttk.Label(infoFrame, text=instructions.show, wraplength=400)
 howTo_Song_lbl = ttk.Label(songFrame, text=instructions.song, wraplength=400)
 howTo_ID_lbl   = ttk.Label(idFrame,   text=instructions.id  , wraplength=400)
 howTo_PSA_lbl  = ttk.Label(psaFrame,  text=instructions.psa , wraplength=400)
 
+#Create lyrics Section
+lyricsText = Text(lyricFrame, wrap=WORD )
+lyricsText.grid( column=0, row=0)
+
+# Create Lyrics Scrollbar, bind it to the lyrics
+lyricsScrollbar = ttk.Scrollbar(lyricFrame)
+lyricsScrollbar.grid( column=1, row=0, sticky="NSEW")
+
+lyricsText['yscrollcommand'] = lyricsScrollbar.set
 
 #Labels for ticker
 prevSong1date_lbl     = ttk.Label(tickFrame, padding=6, text="")

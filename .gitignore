@@ -1,3 +1,7 @@
+#xml stuff
+shows.xml
+psa.xml
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -59,5 +63,6 @@ target/
 # Ignore .csv files generated
 *.csv
 
-# Ignore nowPlaying.txt
+# Ignore nowPlaying.txt and lyrics.txt
 nowPlaying.txt
+lyrics.txt
