@@ -31,6 +31,11 @@ def logSong(*args):
 		songwriter = csv.writer(songlog, delimiter=',')
 		songwriter.writerow([date, time, song, artist, composer, show])
 
+    # Also create a general "song_log.csv" that can be accessed whenever.
+	with open("song_log.csv", 'a', newline='') as songlog:
+		songwriter = csv.writer(songlog, delimiter=',')
+		songwriter.writerow([date, time, song, artist, composer, show])
+
 	#log to nowPlaying.txt
 	nowPlaying(source=LOG_SONG)
 
@@ -51,6 +56,11 @@ def logID():
 	time = str(now.hour).zfill(2) + ':' + str(now.minute).zfill(2)
 
 	with open(filename, 'a', newline='') as idlog:
+		idwriter = csv.writer(idlog, delimiter=',')
+		idwriter.writerow([date, time, 'STATION TAG', 'KTEQ', '', show])
+
+    # Also create a general "song_log.csv" that can be accessed whenever.
+	with open("song_log.csv", 'a', newline='') as idlog:
 		idwriter = csv.writer(idlog, delimiter=',')
 		idwriter.writerow([date, time, 'STATION TAG', 'KTEQ', '', show])
 
@@ -79,6 +89,15 @@ def logPSA(*args):
 		psawriter = csv.writer(psalog, delimiter=',')
 		psawriter.writerow([date, time, psa])
 
+    # Also create a general "song_log.csv" that can be accessed whenever.
+	with open("song_log.csv", 'a', newline='') as psalog:
+		psawriter = csv.writer(psalog, delimiter=',')
+		psawriter.writerow([date, time, psa, 'PSA', '', show])
+
+	with open("psa_log.csv", 'a', newline='') as psalog:
+		psawriter = csv.writer(psalog, delimiter=',')
+		psawriter.writerow([date, time, psa, 'PSA', '', show])
+        
 	#log to nowPlaying.txt
 	nowPlaying(source=LOG_PSA)
 
