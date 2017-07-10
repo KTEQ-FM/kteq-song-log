@@ -218,6 +218,7 @@ def showLyrics():
     # Switch to displaying "Hide" Button
     toggleLyricsShow.grid_remove()
     toggleLyricsHide.grid(column=0, row=1,rowspan=2,columnspan=2,sticky=(N, W, E, S))
+    generateLyrics()
 
 def hideLyrics():
     lyricFrame.grid_remove()
