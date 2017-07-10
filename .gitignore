@@ -66,3 +66,6 @@ target/
 # Ignore nowPlaying.txt and lyrics.txt
 nowPlaying.txt
 lyrics.txt
+
+# ignore .json files generated
+*.json

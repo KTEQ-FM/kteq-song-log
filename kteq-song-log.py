@@ -11,6 +11,8 @@ import shows
 import psa
 import instructions
 
+from swear import SwearLog
+
 LOG_ID   = 0
 LOG_SONG = 1
 LOG_PSA  = 2
@@ -97,7 +99,7 @@ def logPSA(*args):
 	with open("psa_log.csv", 'a', newline='') as psalog:
 		psawriter = csv.writer(psalog, delimiter=',')
 		psawriter.writerow([date, time, psa, 'PSA', '', show])
-        
+
 	#log to nowPlaying.txt
 	nowPlaying(source=LOG_PSA)
 
@@ -223,6 +225,18 @@ def hideLyrics():
     toggleLyricsHide.grid_remove()
     toggleLyricsShow.grid(column=0, row=1,rowspan=2,columnspan=2,sticky=(N, W, E, S))
 
+def swearLogDialog():
+
+    date = prevSong1date_lbl.cget("text")
+    time = prevSong1time_lbl.cget("text")
+    song = prevSong1title_lbl.cget("text")
+    artist = prevSong1artist_lbl.cget("text")
+    composer = prevSong1composer_lbl.cget("text")
+    show = prevSong1show_lbl.cget("text")
+
+    sw = SwearLog(date,time,song,artist,composer,show)
+
+
 #create the window and title it
 root = Tk()
 root.title("KTEQ 91.3FM SONG AND PSA LOG")
@@ -295,6 +309,8 @@ logID         = ttk.Button(idFrame,   text="Log ID",       command=logID)
 refreshShows  = ttk.Button(infoFrame, text="Refresh List", command=refreshShowList)
 toggleLyricsHide      = ttk.Button(logoFrame, text="Hide Lyrics", command=hideLyrics)
 toggleLyricsShow      = ttk.Button(logoFrame, text="Show Lyrics", command=showLyrics)
+swearLog      = ttk.Button(logoFrame, text="SWEAR LOG", command=swearLogDialog)
+
 refreshLyrics = ttk.Button(lyricFrame, text="Generate Lyrics", command=generateLyrics)
 
 
@@ -305,6 +321,7 @@ logPSA.grid(      column=2, row=3, sticky=(W, E))
 logID.grid(       column=2, row=3, sticky=(N, W, E, S))
 refreshShows.grid(column=2, row=1, sticky=(N, W, E, S))
 toggleLyricsHide.grid(column=0, row=1,rowspan=2,columnspan=2,sticky=(N, W, E, S))
+swearLog.grid(column=0, row=3,rowspan=2,columnspan=2,sticky=(N, W, E, S))
 refreshLyrics.grid(column=0, row=1,rowspan=2,columnspan=2,sticky=(N, W, E, S))
 
 
