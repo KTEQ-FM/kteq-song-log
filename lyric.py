@@ -22,7 +22,7 @@ class LyricLog():
 
         # Create Lyrics Scrollbar, bind it to the lyrics
         self.lyricsScrollbar = ttk.Scrollbar(self.lyricFrame)
-        #self.lyricsScrollbar.grid( column=1, row=0, sticky="NSEW")
+        self.lyricsScrollbar.grid( column=1, row=0, sticky="NSEW")
 
         self.lyricsText['yscrollcommand'] = self.lyricsScrollbar.set
 
