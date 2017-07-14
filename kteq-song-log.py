@@ -12,6 +12,7 @@ import psa
 import instructions
 
 from swear import SwearLog
+from lyric import LyricLog
 
 LOG_ID   = 0
 LOG_SONG = 1
@@ -205,26 +206,8 @@ def refreshShowList():
 	for show in showList.list:
 		showNameList['menu'].add_command(label=show, command=lambda s=show: showName.set(s))
 
-def generateLyrics():
-    with open("lyrics.txt") as f:
-            lyrics = f.readlines()
-    lyrics = "".join(lyrics)
-    lyricsText.delete("1.0",END)
-    lyricsText.insert(END, lyrics)
-
-def showLyrics():
-    lyricFrame.grid(column=18, row=0,  columnspan=15, rowspan=15, sticky=(N, W, E, S))
-
-    # Switch to displaying "Hide" Button
-    toggleLyricsShow.grid_remove()
-    toggleLyricsHide.grid(column=0, row=1,rowspan=2,columnspan=2,sticky=(N, W, E, S))
-    generateLyrics()
-
-def hideLyrics():
-    lyricFrame.grid_remove()
-    # Switch to displaying "Show" Button
-    toggleLyricsHide.grid_remove()
-    toggleLyricsShow.grid(column=0, row=1,rowspan=2,columnspan=2,sticky=(N, W, E, S))
+def lyricLogDialog():
+    ly = LyricLog()
 
 def swearLogDialog():
 
@@ -250,7 +233,6 @@ psaFrame   = ttk.Frame(root, borderwidth=5, relief="sunken")
 idFrame    = ttk.Frame(root, borderwidth=5, relief="sunken")
 tickFrame  = ttk.Frame(root, borderwidth=5, relief="sunken")
 logoFrame  = ttk.Frame(root, borderwidth=5, relief="sunken")
-lyricFrame = ttk.Frame(root, borderwidth=5, relief="sunken")
 
 #place frames
 infoFrame.grid( column=0,  row=0,  columnspan=6,  rowspan=5,  sticky=(N, W, E, S))
@@ -259,7 +241,6 @@ psaFrame.grid(  column=6,  row=5,  columnspan=6,  rowspan=5,  sticky=(N, W, E, S
 idFrame.grid(   column=6,  row=0,  columnspan=6,  rowspan=5,  sticky=(N, W, E, S))
 tickFrame.grid( column=0,  row=10, columnspan=18, rowspan=5,  sticky=(N, W, E, S))
 logoFrame.grid( column=12, row=0,  columnspan=6,  rowspan=10, sticky=(N, W, E, S))
-lyricFrame.grid(column=18, row=0,  columnspan=15, rowspan=15, sticky=(N, W, E, S))
 
 #CREATE NEW INSTANCE OF SHOWS AND PSAS
 showList = shows.Shows()
@@ -308,11 +289,10 @@ logSong       = ttk.Button(songFrame, text="Log Song",     command=logSong)
 logPSA        = ttk.Button(psaFrame,  text="Log PSA",      command=logPSA)
 logID         = ttk.Button(idFrame,   text="Log ID",       command=logID)
 refreshShows  = ttk.Button(infoFrame, text="Refresh List", command=refreshShowList)
-toggleLyricsHide      = ttk.Button(logoFrame, text="Hide Lyrics", command=hideLyrics)
-toggleLyricsShow      = ttk.Button(logoFrame, text="Show Lyrics", command=showLyrics)
-swearLog      = ttk.Button(logoFrame, text="SWEAR LOG", command=swearLogDialog)
 
-refreshLyrics = ttk.Button(lyricFrame, text="Generate Lyrics", command=generateLyrics)
+swearLog      = ttk.Button(logoFrame, text="SWEAR LOG", command=swearLogDialog)
+lyricLog      = ttk.Button(logoFrame, text="SHOW LYRICS", command=lyricLogDialog)
+
 
 
 
@@ -321,9 +301,9 @@ logSong.grid(     column=2, row=4, sticky=(W, E))
 logPSA.grid(      column=2, row=3, sticky=(W, E))
 logID.grid(       column=2, row=3, sticky=(N, W, E, S))
 refreshShows.grid(column=2, row=1, sticky=(N, W, E, S))
-toggleLyricsHide.grid(column=0, row=1,rowspan=2,columnspan=2,sticky=(N, W, E, S))
 swearLog.grid(column=0, row=3,rowspan=2,columnspan=2,sticky=(N, W, E, S))
-refreshLyrics.grid(column=0, row=1,rowspan=2,columnspan=2,sticky=(N, W, E, S))
+lyricLog.grid(column=0, row=1,rowspan=2,columnspan=2,sticky=(N, W, E, S))
+
 
 
 
@@ -339,16 +319,6 @@ howTo_Show_lbl = ttk.Label(infoFrame, text=instructions.show, wraplength=400)
 howTo_Song_lbl = ttk.Label(songFrame, text=instructions.song, wraplength=400)
 howTo_ID_lbl   = ttk.Label(idFrame,   text=instructions.id  , wraplength=400)
 howTo_PSA_lbl  = ttk.Label(psaFrame,  text=instructions.psa , wraplength=400)
-
-#Create lyrics Section
-lyricsText = Text(lyricFrame, wrap=WORD )
-lyricsText.grid( column=0, row=0)
-
-# Create Lyrics Scrollbar, bind it to the lyrics
-lyricsScrollbar = ttk.Scrollbar(lyricFrame)
-lyricsScrollbar.grid( column=1, row=0, sticky="NSEW")
-
-lyricsText['yscrollcommand'] = lyricsScrollbar.set
 
 #Labels for ticker
 prevSong1date_lbl     = ttk.Label(tickFrame, padding=6, text="")
