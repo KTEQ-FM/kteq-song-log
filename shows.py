@@ -2,6 +2,7 @@
 
 import datetime
 import xml.etree.ElementTree as ET
+import json
 
 # ===========================================================================
 # Show list Class
@@ -37,6 +38,8 @@ class Shows(object):
     self.sat.append("Free Play/Unscripted")
     self.sun.append("Free Play/Unscripted")
 
+    # No longer using xml after this update
+    """
     # Gather all other shows from xml file
     tree = ET.parse('shows.xml')
     root = tree.getroot()
@@ -49,6 +52,14 @@ class Shows(object):
                     for aka in show.findall('aka'):
                         self.addShow(aka.text, date.attrib['name'])
                         # print("\t", aka.text)
+    """
+
+    # Using JSON now :)
+    with open('shows.json') as data_file:
+        j = json.load(data_file)
+        for show in j['shows']:
+            if show['status'].upper() == "ACTIVE":
+                self.addShow(show['show name'], show['show date'])
 
     # combine everything to full list
     self.schedule.append(self.mon)
@@ -99,7 +110,7 @@ class Shows(object):
 
     #Collapse list
     self.list = [item for sublist in self.list for item in sublist]
-  
+
   def printFullSchedule(self):
     print("Current KTEQ Shows: ")
     for day in self.schedule:
@@ -116,5 +127,4 @@ if __name__ == '__main__':
   s = Shows()
   s.printFullSchedule()
   print("")
-  s.printlistsSchedule()  
-
+  s.printlistsSchedule()
