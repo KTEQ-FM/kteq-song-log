@@ -58,7 +58,7 @@ class ShowFrame(object):
         self.buttonSubmit = ttk.Button(self.frame, text="Add New Show", command=self.newShow)
 
         # Dictionary with options
-        choices = ['Monday','Tuesday','Wednesday','Thursday','Friday', 'Saturday', 'Sunday']
+        choices = ['Monday', 'Monday','Tuesday','Wednesday','Thursday','Friday', 'Saturday', 'Sunday']
         self.varDate.set('Monday') # set the default option
 
         self.menuDate = ttk.OptionMenu(self.frame, self.varDate, *choices)
@@ -129,7 +129,7 @@ class ShowFrame(object):
             j +=3
 
     def loadJSON(self):
-        with open('testshow.json') as data_file:
+        with open('shows.json') as data_file:
             return json.load(data_file)
 
     def sortJSON(self):
@@ -163,7 +163,7 @@ class ShowFrame(object):
             # add to json
             newJSON['shows'].append(newEntry)
             id+=1
-        with open('testshow.json', 'w') as outfile:
+        with open('shows.json', 'w') as outfile:
             json.dump(newJSON, outfile,sort_keys=False,indent=4, separators=(',', ': '))
 
 
@@ -202,7 +202,7 @@ class ShowFrame(object):
         #print(show)
         # add the new show
         j['shows'].append(show)
-        with open('testshow.json', 'w') as outfile:
+        with open('shows.json', 'w') as outfile:
             json.dump(j, outfile,sort_keys=False,indent=4, separators=(',', ': '))
 
         self.sortJSON()
